@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puzzle</title>
+</head>
+
+<body>
+    <center>
+        <h1 style="font-family: 'Courier New', Courier, monospace; text-align: center; color: red">Puzzle <3
+        </h1>
+
+        <table>
+            <tr>
+                <td><img id="img_0" src="img/0.png" onclick="seleccionar(0)"></td>
+                <td><img id="img_1" src="img/1.png" onclick="seleccionar(1)"></td>
+                <td><img id="img_2" src="img/2.png" onclick="seleccionar(2)"></td>
+            </tr>
+            <tr>
+                <td><img id="img_3" src="img/3.png" onclick="seleccionar(3)"></td>
+                <td><img id="img_4" src="img/4.png" onclick="seleccionar(4)"></td>
+                <td><img id="img_5" src="img/5.png" onclick="seleccionar(5)"></td>
+            </tr>
+            <tr>
+                <td><img id="img_6" src="img/6.png" onclick="seleccionar(6)"></td>
+                <td><img id="img_7" src="img/7.png" onclick="seleccionar(7)"></td>
+                <td><img id="img_8" src="img/8.png" onclick="seleccionar(8)"></td>
+            </tr>
+        </table>
+    </center>
+</body>
+<script type="text/javascript">
+    function desordenar_array() {
+        do {
+            piezas = piezas.sort(function() { return Math.random() - 0.5 });
+        } while (!esResoluble(piezas));
+        console.log(piezas);
+    }
+
+    function desmarcar() {
+        for (var i = 0; i < 9; i++) {
+            document.getElementById("img_" + i).style.border = null;
+        }
+
+    }
+
+    function seleccionar(casilla) {
+
+        // Encuentra la posición de la pieza vacía
+    const posicionVacia = piezas.indexOf(8);
+
+    // Verifica si la pieza seleccionada es adyacente a la vacía
+    if (Math.abs(casilla - posicionVacia) === 1 || Math.abs(casilla - posicionVacia) === 3) {
+        intercambiar(casilla, posicionVacia);
+    }
+
+    desmarcar();
+    comprobarPuzzle();  
+    }
+
+    function calcularInversiones(array) {
+        let inversiones = 0;
+        for (let i = 0; i < array.length - 1; i++) {
+            for (let j = i + 1; j < array.length; j++) {
+                if (array[i] > array[j]) {
+                    inversiones++;
+                }
+            }
+        }
+        return inversiones;
+    }
+    
+    function esResoluble(array) {
+        return calcularInversiones(array) % 2 === 0;
+    }
+
+    function intercambiar(pos1, pos2) {
+        // Verifica si las piezas están en filas o columnas adyacentes
+        if (Math.abs(pos1 - pos2) === 1 || Math.abs(pos1 - pos2) === 3) {
+            let temp = piezas[pos1];
+            piezas[pos1] = piezas[pos2];
+            piezas[pos2] = temp;
+            reloadPuzzle();
+        }
+    }
+    function comprobarPuzzle() {
+        var correcto = true;
+        for (var i = 0; i < 9; i++) {
+            if (piezas[i] != i) {
+                correcto = false;
+            }
+        }
+
+        if (correcto == true) {
+            alert("Felicidades! Resolviste el puzzle 😍");
+        }
+    }
+
+    function reloadPuzzle() {
+        for (var i = 0; i < 9; i++) {
+            var imagen = piezas[i]; //Se obtiene el numero de la imagen que hay en el array en la casilla i:
+            document.getElementById("img_" + i).src = "img/" + imagen + ".png";
+        }
+
+    }
+
+    var piezas = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+    var num_click = 0;
+    var casilla_click_primero;
+    desordenar_array();
+    reloadPuzzle();
+</script>
+
+</html>
